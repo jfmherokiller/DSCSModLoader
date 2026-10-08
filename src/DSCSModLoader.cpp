@@ -7,6 +7,8 @@
 #include "ScriptExtension.h"
 #include "dscs/GameInterface.h"
 #include "dscs/Savegame.h"
+#include "dscs/Symbols.h"
+#include "modloader/sigscan.h"
 #include "modloader/plugin.h"
 #include "modloader/utils.h"
 
@@ -133,15 +135,17 @@ std::string getWindowsUsername()
 bool baseUpdateOverride(dscs::AppContext* context)
 {
     using Func = bool (*)(dscs::ResourceManager*);
-    Func func  = (Func)(getBaseOffset() + 0x500EC0);
+    Func func  = dscs::symbols::as<Func>(dscs::symbols::Sym::ResourceManagerUpdate);
 
     context->timeDelta = dscs::getTimeDelta(&context->timer);
     if (dscs::useTargetDelta()) context->timeDelta = 1.0 / dscs::getTargetFPS();
 
     context->timeDelta *= DSCSModLoader::getInstance().getSpeedup();
 
-    *reinterpret_cast<float*>(getBaseOffset() + 0xC3AA58) = context->timeDelta;
-    *reinterpret_cast<float*>(getBaseOffset() + 0xC3AA5C) = context->timeDelta / 2;
+    // FrameDelta is an 8-byte slot; its upper dword is unused by the game and holds delta / 2.
+    float* frameDelta = dscs::symbols::as<float*>(dscs::symbols::Sym::FrameDelta);
+    frameDelta[0]     = context->timeDelta;
+    frameDelta[1]     = context->timeDelta / 2;
 
     func(dscs::getResourceManagerContext()->manager);
     return true;
@@ -157,7 +161,7 @@ void setVSync(bool enable)
 void setMaxFPSOverride(int32_t fps)
 {
     if (fps == 60) fps = DSCSModLoader::getInstance().getFPSLimit();
-    *reinterpret_cast<int32_t*>(getBaseOffset() + 0xBF5F4C) = fps;
+    if (int32_t* maxFps = dscs::symbols::as<int32_t*>(dscs::symbols::Sym::MaxFPS)) *maxFps = fps;
 }
 
 void printfunc(HSQUIRRELVM vm, const SQChar* msg, ...)
@@ -295,7 +299,7 @@ void DSCSModLoaderImpl::archiveListInit()
     if (doBlackFix)
     {
         BOOST_LOG_TRIVIAL(info) << "Running Gamescope/Steam Deck blackscreen fix.";
-        auto window = WindowFromDC(*(HDC*)(getBaseOffset() + 0xc365a8));
+        auto window = WindowFromDC(*dscs::symbols::as<HDC*>(dscs::symbols::Sym::WindowDC));
         window      = GetParent(window);
         ShowWindow(window, SW_HIDE);
         ShowWindow(window, SW_SHOW);
@@ -303,10 +307,11 @@ void DSCSModLoaderImpl::archiveListInit()
 
     BOOST_LOG_TRIVIAL(info) << "initializing archive list...";
 
-    uint64_t* archiveCount = (uint64_t*)(getBaseOffset() + 0xF20770);
-    char* archiveList      = (char*)(getBaseOffset() + 0xF219C0);
-    char** archiveTable    = (char**)(getBaseOffset() + 0xF229C0);
-    bool* archiveIsInit    = (bool*)(getBaseOffset() + 0xF20656);
+    using dscs::symbols::Sym;
+    uint64_t* archiveCount = dscs::symbols::as<uint64_t*>(Sym::ArchiveCount);
+    char* archiveList      = dscs::symbols::as<char*>(Sym::ArchiveList);
+    char** archiveTable    = dscs::symbols::as<char**>(Sym::ArchiveTable);
+    bool* archiveIsInit    = dscs::symbols::as<bool*>(Sym::ArchiveIsInit);
 
     const auto addArchive = [=](const char* name)
     {
@@ -316,7 +321,7 @@ void DSCSModLoaderImpl::archiveListInit()
     };
 
     using GetControllerTypeFunc             = uint64_t (*)();
-    GetControllerTypeFunc getControllerType = (GetControllerTypeFunc)(getBaseOffset() + 0x57BFF0);
+    GetControllerTypeFunc getControllerType = dscs::symbols::as<GetControllerTypeFunc>(Sym::GetControllerType);
 
     auto controllerType = getControllerType();
     auto packed         = config["Archive"]["packed"].as_array();
@@ -454,20 +459,62 @@ void DSCSModLoaderImpl::applyPatchFile(const std::filesystem::path file)
         const auto left  = line.substr(0, splitPos);
         const auto right = line.substr(splitPos + 1);
 
-        std::size_t pos;
-        const auto offset = std::stoll(left, &pos, 16);
+        char* address = nullptr;
+        if (left.starts_with("sig:"))
+        { // sig:<pattern>[+<hex offset>] - resolved by signature, independent of the game build
+            auto patternText    = left.substr(4);
+            int64_t patchOffset = 0;
+            const auto plusPos  = patternText.find('+');
+            if (plusPos != std::string::npos)
+            {
+                std::size_t pos;
+                const auto offsetText = patternText.substr(plusPos + 1);
+                try
+                {
+                    patchOffset = std::stoll(offsetText, &pos, 16);
+                }
+                catch (const std::exception&)
+                {
+                    pos = 0;
+                }
+                if (pos == 0 || pos != offsetText.size())
+                {
+                    BOOST_LOG_TRIVIAL(error) << std::format("[{}:{}] invalid signature offset", filename, lineId);
+                    continue;
+                }
+                patternText = patternText.substr(0, plusPos);
+            }
 
-        if (pos != left.size())
-        { // offset invalid format
-            BOOST_LOG_TRIVIAL(error)
-                << std::format("[{}:{}] invalid offset, must be a hexadecimal number, e.g. 0x123456", filename, lineId);
-            continue;
+            char* match = modloader::sigscan::findUnique(patternText);
+            if (match == nullptr)
+            {
+                BOOST_LOG_TRIVIAL(error) << std::format("[{}:{}] signature not found or not unique", filename, lineId);
+                continue;
+            }
+            address = match + patchOffset;
         }
+        else
+        {
+            std::size_t pos;
+            const auto offset = std::stoll(left, &pos, 16);
 
-        if (offset < 0 || offset >= 0x1029000)
-        { // sanity/bounds check
-            BOOST_LOG_TRIVIAL(error) << std::format("[{}:{}] offset out of bounds", filename, lineId);
-            continue;
+            if (pos != left.size())
+            { // offset invalid format
+                BOOST_LOG_TRIVIAL(error) << std::format(
+                    "[{}:{}] invalid offset, must be a hexadecimal number, e.g. 0x123456", filename, lineId);
+                continue;
+            }
+
+            if (offset < 0 || offset >= 0x1029000)
+            { // sanity/bounds check
+                BOOST_LOG_TRIVIAL(error) << std::format("[{}:{}] offset out of bounds", filename, lineId);
+                continue;
+            }
+            BOOST_LOG_TRIVIAL(warning) << std::format(
+                "[{}:{}] raw offset patch; prefer 'sig:<pattern>[+offset]' so the patch survives other builds",
+                filename,
+                lineId);
+            address = getBaseOffset() + offset;
         }
 
         std::vector<uint8_t> data;
@@ -486,7 +533,7 @@ void DSCSModLoaderImpl::applyPatchFile(const std::filesystem::path file)
         }
 
         BOOST_LOG_TRIVIAL(debug) << std::format("[{}:{}] applied patch successfully", filename, lineId);
-        patchBytes(data, offset);
+        patchBytes(data, address);
     }
 }
 
@@ -551,22 +598,52 @@ void DSCSModLoaderImpl::init()
 
     BOOST_LOG_TRIVIAL(info) << "initializing DSCSModLoader version 0.0.1...";
 
+    // Resolve every game address by signature. If anything is missing this is not a
+    // supported game build: leave the game untouched instead of patching wrong memory.
+    const auto missing = dscs::symbols::resolveAll(
+        [](bool isError, const std::string& message)
+        {
+            if (isError)
+                BOOST_LOG_TRIVIAL(error) << "[sigscan] " << message;
+            else
+                BOOST_LOG_TRIVIAL(debug) << "[sigscan] " << message;
+        });
+    if (missing != 0)
+    {
+        BOOST_LOG_TRIVIAL(fatal) << std::format(
+            "{} game signature(s) could not be resolved - unsupported game version. "
+            "DSCSModLoader is disabled; the game will run unmodified.",
+            missing);
+        return;
+    }
+    BOOST_LOG_TRIVIAL(info) << "All game signatures resolved.";
+
+    using dscs::symbols::Sym;
+    using dscs::symbols::get;
+
     // Patches start
-    if (config["Patches"]["DisableVSync"].value_or(false)) patchBytes({ 0x00 }, 0x2786eb);
+    // mov ecx, 1 -> mov ecx, 0 (wglSwapIntervalEXT argument)
+    if (config["Patches"]["DisableVSync"].value_or(false)) patchBytes({ 0x00 }, get(Sym::Site_VSyncSwapInterval) + 1);
     setFPSLimit(config["Patches"]["FPSLimit"].value_or(60));
     setSpeedup(config["Patches"]["Speedup"].value_or(1.0f));
 
-    patchBytes({ 0xB9 }, 0x2d0233);                   // fix custom keyboard layout crash, stol -> stoul
-    patchBytes({ 0x63, 0x7D, 0x6B, 0x00 }, 0x582cf1); // FPS Hack #1, read frame delta
-    patchBytes({ 0xD9, 0x06, 0xA1, 0x00 }, 0x22a37f); // FPS Hack #2, read frame delta / 2
-    patchBytes({ 0x65, 0x19, 0xA1, 0x00 }, 0x2290f3); // FPS Hack #3, read frame delta / 2
+    // fix custom keyboard layout crash: retarget `call strtol` to strtoul
+    if (!patchRel32(get(Sym::Site_KeyboardStrtolCall), 1, 5, get(Sym::Strtoul)))
+        BOOST_LOG_TRIVIAL(error) << "keyboard layout fix: strtoul out of rel32 range";
+
+    // FPS hacks: point three `movss xmmN, [rip+X]` reads at the frame delta (and delta / 2)
+    char* frameDelta     = get(Sym::FrameDelta);
+    char* frameDeltaHalf = frameDelta + 4;
+    patchRel32(get(Sym::Site_FrameDeltaRead1), 4, 8, frameDelta);     // FPS Hack #1, read frame delta
+    patchRel32(get(Sym::Site_FrameDeltaRead2), 4, 8, frameDeltaHalf); // FPS Hack #2, read frame delta / 2
+    patchRel32(get(Sym::Site_FrameDeltaRead3), 4, 8, frameDeltaHalf); // FPS Hack #3, read frame delta / 2
     // Patches end
 
-    redirectJump(&baseUpdateOverride, 0x52b6d0);
-    redirectJump(&setMaxFPSOverride, 0x27b150);
+    redirectJump(&baseUpdateOverride, get(Sym::BaseUpdate));
+    redirectJump(&setMaxFPSOverride, get(Sym::SetMaxFPS));
 
     // script extensions start
-    redirectJump(&_squirrelInit, 0x1FA7AE);
+    redirectJump(&_squirrelInit, get(Sym::Site_SquirrelInitTail));
 
     addSquirrelFunction("Debug", "Log", SQUIRREL_AWAY(dscs::modloader::DebugLog));
 
@@ -585,15 +662,16 @@ void DSCSModLoaderImpl::init()
     // script extensions end
 
     // custom archive list start
-    redirectCall(&_archiveListInit, 0x2CF1BA);
-    redirectJump(getBaseOffset() + 0x2CF2F1, 0x2CF1C6);
+    // 12-byte `mov rax, imm64; call rax`, immediately followed by a jump over the vanilla list init
+    redirectCall(&_archiveListInit, get(Sym::Site_ArchiveListInit));
+    redirectJump(get(Sym::Site_ArchiveListInitEnd), get(Sym::Site_ArchiveListInit) + 12);
     // custom archive list end
 
     // custom save/load start
-    redirectJump(&_createSaveHook, 0x288990);
-    redirectJump(&_writeSaveFileHook, 0x2bab20);
-    redirectJump(&_loadSaveHook, 0x289bb0);
-    redirectJump(&_readSaveFileHook, 0x2bae90);
+    redirectJump(&_createSaveHook, get(Sym::CreateSave));
+    redirectJump(&_writeSaveFileHook, get(Sym::WriteSaveFile));
+    redirectJump(&_loadSaveHook, get(Sym::LoadSave));
+    redirectJump(&_readSaveFileHook, get(Sym::ReadSaveFile));
 
     addCoSaveHook("scanDataCS", readScanDataCS, writeScanDataCS);
     addCoSaveHook("scanDataHM", readScanDataHM, writeScanDataHM);
@@ -638,12 +716,17 @@ void DSCSModLoaderImpl::init()
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 {
     // redirect SteamAPI_Init call to custom initialization function
+    // The import table is readable even while SteamStub still has .text encrypted; the
+    // signature scan itself runs later, from the redirected SteamAPI_Init call.
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        SteamAPI_Init             = *((PTR_SteamAPI_Init*)(getBaseOffset() + 0x8C09D0));
+        void** slot = modloader::sigscan::findImportSlot("steam_api64.dll", "SteamAPI_Init");
+        if (slot == nullptr) return 1; // unknown executable: stay inert
+
+        SteamAPI_Init             = reinterpret_cast<PTR_SteamAPI_Init>(*slot);
         const void* ptr           = DSCSModLoaderImpl::bootstrap;
         std::vector<uint8_t> data = { ptr2bytes(ptr) };
-        patchBytes(data, 0x8C09D0);
+        patchBytes(data, slot);
     }
 
     return 1;

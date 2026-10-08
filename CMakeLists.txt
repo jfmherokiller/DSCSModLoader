@@ -43,7 +43,9 @@ target_sources(DSCSModLoader
     "src/ScriptExtension.cpp"
     "src/CoSave.cpp"
     "src/SquirrelAway.cpp" 
-    "src/CoSaveExtension.cpp")
+    "src/CoSaveExtension.cpp"
+    "src/sigscan.cpp"
+    "src/Symbols.cpp")
 
 target_include_directories(
     DSCSModLoader
@@ -55,3 +57,10 @@ target_include_directories(
 )
 
 target_link_libraries(DSCSModLoader PRIVATE Boost::log_setup tomlplusplus)
+
+# --- Offline signature test (no Boost) ---
+option(DSCSML_BUILD_TESTS "Build the offline signature verification tool" OFF)
+if(DSCSML_BUILD_TESTS)
+    add_executable(sigtest "tests/sigtest.cpp" "src/sigscan.cpp" "src/Symbols.cpp")
+    target_include_directories(sigtest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+endif()

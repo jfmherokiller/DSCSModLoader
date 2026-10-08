@@ -1,0 +1,911 @@
+[
+ {
+  "name": "GetSeenData",
+  "kind": "code",
+  "rva": "0x1a4740",
+  "pattern": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 83 EC 20 48 8B DA E8 ?? ?? ?? ?? 4C 8D 40 20 66 C7 40 18 00 00 4D 85 C0 74 0D",
+  "offset": 0
+ },
+ {
+  "name": "GetGameContext",
+  "kind": "code",
+  "rva": "0x1a70d0",
+  "pattern": "48 83 EC 28 48 8B 05 ?? ?? ?? ?? 48 85 C0 0F 85 ?? ?? ?? ?? B9 C8 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "GetDigisterMap",
+  "kind": "calltarget",
+  "rva": "0x2ccb20",
+  "pattern": "8B 81 F0 09 00 00 83 C0 F6 83 F8 01",
+  "offset": 14
+ },
+ {
+  "name": "GetSoundStruct",
+  "kind": "code",
+  "rva": "0x2bb6d0",
+  "pattern": "48 83 EC 38 48 C7 44 24 20 FE FF FF FF 48 8B 05 ?? ?? ?? ?? 48 85 C0 75 24 B9 F8 01 00 00 E8 ?? ?? ?? ?? 48 89 44 24 40 48 85 C0 74 09 48 8B C8 E8 ?? ?? ?? ?? 90 48 89 05 ?? ?? ?? ?? 48 83 C4 38",
+  "offset": 0
+ },
+ {
+  "name": "SetScanData",
+  "kind": "code",
+  "rva": "0x19aa60",
+  "pattern": "40 53 48 83 EC 20 4C 8B 49 08 45 33 DB",
+  "offset": 0
+ },
+ {
+  "name": "GetTimeDelta",
+  "kind": "code",
+  "rva": "0x5030d0",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 8D 0D ?? ?? ?? ?? FF 15 ?? ?? ?? ?? 0F 57 C0",
+  "offset": 0
+ },
+ {
+  "name": "UseTargetDelta",
+  "kind": "code",
+  "rva": "0x51c8c0",
+  "pattern": "0F B6 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC C7 81 D4 04 00 00 00 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "GetTargetFPS",
+  "kind": "code",
+  "rva": "0x51c8b0",
+  "pattern": "8B 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC CC 0F B6 05 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "GetSaveDirPath",
+  "kind": "code",
+  "rva": "0x2b9f00",
+  "pattern": "40 53 48 83 EC 40 33 C0 4C 8D 05 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "CreateSaveDir",
+  "kind": "code",
+  "rva": "0x2ba570",
+  "pattern": "48 81 EC 08 01 00 00 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 F0 00 00 00 33 D2",
+  "offset": 0
+ },
+ {
+  "name": "EncryptSaveFile",
+  "kind": "code",
+  "rva": "0x2cfcf0",
+  "pattern": "48 89 5C 24 10 48 89 6C 24 18 56 57 41 56 48 83 EC 20 48 8B 05 ?? ?? ?? ?? 48 33 C4",
+  "offset": 0
+ },
+ {
+  "name": "DecryptSaveFile",
+  "kind": "code",
+  "rva": "0x2cff70",
+  "pattern": "40 53 55 57 41 56 48 83 EC 58 48 8B 05 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "EndThread",
+  "kind": "code",
+  "rva": "0x8344c8",
+  "pattern": "48 83 EC 28 E8 ?? ?? ?? ?? CC CC CC 48 8B C4",
+  "offset": 0
+ },
+ {
+  "name": "GetResourceDirCStr",
+  "kind": "code",
+  "rva": "0x4f8f60",
+  "pattern": "48 8D 05 ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC 40 53 48 81 EC 20 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "GetResourceDirString",
+  "kind": "code",
+  "rva": "0x5f70f0",
+  "pattern": "48 89 5C 24 08 57 48 83 EC 30 33 DB 48 8B F9",
+  "offset": 0
+ },
+ {
+  "name": "AddArchiveOverride",
+  "kind": "code",
+  "rva": "0x4fd150",
+  "pattern": "88 54 24 10 48 89 4C 24 08 55 56 57",
+  "offset": 0
+ },
+ {
+  "name": "VfsDeleteFile",
+  "kind": "code",
+  "rva": "0x5f6fa0",
+  "pattern": "48 83 EC 78 48 C7 44 24 20 FE FF FF FF 48 C7 44 24 40 0F 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "VfsCreateFile",
+  "kind": "code",
+  "rva": "0x5f6e70",
+  "pattern": "40 53 48 83 EC 50 48 C7 44 24 20 FE FF FF FF 48 C7 44 24 40 0F 00 00 00 48 C7 44 24 38 00 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "VfsWriteFile",
+  "kind": "calltarget",
+  "rva": "0x5f6d30",
+  "pattern": "48 8D 54 24 30 48 8D 8C 24 40 03 00 00",
+  "offset": 13
+ },
+ {
+  "name": "VfsReadFile",
+  "kind": "calltarget",
+  "rva": "0x5f6c10",
+  "pattern": "48 8D 54 24 28 48 8D 8C 24 E0 01 00 00",
+  "offset": 13
+ },
+ {
+  "name": "ResourceManagerUpdate",
+  "kind": "code",
+  "rva": "0x500ec0",
+  "pattern": "40 56 48 83 EC 20 FF 0D ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "GetControllerType",
+  "kind": "code",
+  "rva": "0x57bff0",
+  "pattern": "48 81 EC A8 00 00 00 48 8D 0D ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "BaseUpdate",
+  "kind": "code",
+  "rva": "0x52b6d0",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 83 C1 08 E8 ?? ?? ?? ?? F3 0F 11 43 10",
+  "offset": 0
+ },
+ {
+  "name": "SetMaxFPS",
+  "kind": "code",
+  "rva": "0x27b150",
+  "pattern": "89 0D ?? ?? ?? ?? C3 CC CC CC CC CC CC CC CC CC 40 53",
+  "offset": 0
+ },
+ {
+  "name": "CreateSave",
+  "kind": "code",
+  "rva": "0x288990",
+  "pattern": "48 85 D2 0F 84 ?? ?? ?? ?? 56 48 83 EC 30",
+  "offset": 0
+ },
+ {
+  "name": "WriteSaveFile",
+  "kind": "code",
+  "rva": "0x2bab20",
+  "pattern": "48 89 5C 24 08 57 48 81 EC C0 05 00 00",
+  "offset": 0
+ },
+ {
+  "name": "LoadSave",
+  "kind": "code",
+  "rva": "0x289bb0",
+  "pattern": "48 85 D2 0F 84 ?? ?? ?? ?? 48 89 4C 24 08",
+  "offset": 0
+ },
+ {
+  "name": "ReadSaveFile",
+  "kind": "code",
+  "rva": "0x2bae90",
+  "pattern": "48 89 5C 24 08 57 48 81 EC C0 02 00 00",
+  "offset": 0
+ },
+ {
+  "name": "Strtoul",
+  "kind": "code",
+  "rva": "0x82d8f0",
+  "pattern": "40 53 48 83 EC 30 41 8B D8 4C 8B C2 48 8B D1 48 8D 4C 24 20 E8 ?? ?? ?? ?? 48 8B D0 45 33 C9 44 8B C3 33 C9 E8 ?? ?? ?? ?? 48 83 C4 30 5B C3 CC 40 53 48 83 EC 30 41 8B D8 4C 8B C2 48 8B D1 48 8D 4C 24 20 E8 ?? ?? ?? ?? 48 8B D0 45 33 C9",
+  "offset": 0
+ },
+ {
+  "name": "Site_VSyncSwapInterval",
+  "kind": "code",
+  "rva": "0x2786ea",
+  "pattern": "48 85 C0 74 07 B9 01 00 00 00 FF D0",
+  "offset": 5
+ },
+ {
+  "name": "Site_KeyboardStrtolCall",
+  "kind": "code",
+  "rva": "0x2d0232",
+  "pattern": "E8 ?? ?? ?? ?? 8B F8 48 3B 5C 24 20",
+  "offset": 0
+ },
+ {
+  "name": "Site_FrameDeltaRead1",
+  "kind": "code",
+  "rva": "0x582ced",
+  "pattern": "FF 50 18 48 8B 4B 08 48 8D 54 24 20",
+  "offset": 12
+ },
+ {
+  "name": "Site_FrameDeltaRead2",
+  "kind": "code",
+  "rva": "0x22a37b",
+  "pattern": "F3 0F 10 1D ?? ?? ?? ?? 0F 28 CE FF 50 10",
+  "offset": 0
+ },
+ {
+  "name": "Site_FrameDeltaRead3",
+  "kind": "code",
+  "rva": "0x2290ef",
+  "pattern": "74 14 48 8B 01 F3 0F 10 1D ?? ?? ?? ??",
+  "offset": 5
+ },
+ {
+  "name": "Site_SquirrelInitTail",
+  "kind": "code",
+  "rva": "0x1fa7ae",
+  "pattern": "E9 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC CC CC CC CC 48 8B C4 55 48 8D 68 A1",
+  "offset": 0
+ },
+ {
+  "name": "Site_ArchiveListInit",
+  "kind": "code",
+  "rva": "0x2cf1ba",
+  "pattern": "48 8D 1D ?? ?? ?? ?? 48 C7 05 ?? ?? ?? ?? 00 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "Site_ArchiveListInitEnd",
+  "kind": "code",
+  "rva": "0x2cf2f1",
+  "pattern": "48 FF C1 48 89 0D ?? ?? ?? ?? 48 8D 0D ?? ?? ?? ??",
+  "offset": 10
+ },
+ {
+  "name": "sq_open",
+  "kind": "code",
+  "rva": "0x607140",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 48 8B F1 B9 68 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_newthread",
+  "kind": "code",
+  "rva": "0x606ff0",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 6C 24 58 48 89 74 24 60 48 8B EA",
+  "offset": 0
+ },
+ {
+  "name": "sq_seterrorhandler",
+  "kind": "code",
+  "rva": "0x607ef0",
+  "pattern": "40 53 48 83 EC 30 48 83 CA FF 48 8B D9 E8 ?? ?? ?? ?? 0F 10 08 66 0F 7E CA 0F 11 4C 24 20 81 FA 00 01 00 08 74 10 81 FA 00 02 00 08 74 08 81 FA 01 00 00 01 75 4B 48 8B 44 24 28 44 8B 83 90 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_getprintfunc",
+  "kind": "code",
+  "rva": "0x6068c0",
+  "pattern": "48 8B 81 18 01 00 00 48 8B 80 48 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_wakeupvm",
+  "kind": "code",
+  "rva": "0x608510",
+  "pattern": "48 8B C4 41 56 48 83 EC 60 48 C7 40 D8 FE FF FF FF",
+  "offset": 0
+ },
+ {
+  "name": "sq_getvmstate",
+  "kind": "code",
+  "rva": "0x606c00",
+  "pattern": "48 83 B9 28 01 00 00 00 74 06 B8 02 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_compile",
+  "kind": "code",
+  "rva": "0x605f40",
+  "pattern": "4C 8B DC 41 56 48 83 EC 70 49 C7 43 C8 FE FF FF FF",
+  "offset": 0
+ },
+ {
+  "name": "sq_compilebuffer",
+  "kind": "code",
+  "rva": "0x606060",
+  "pattern": "48 83 EC 58 48 8B 84 24 80 00 00 00 48 89 54 24 30",
+  "offset": 0
+ },
+ {
+  "name": "sq_enabledebuginfo",
+  "kind": "code",
+  "rva": "0x606190",
+  "pattern": "48 8B 81 18 01 00 00 48 85 D2 0F 95 C2",
+  "offset": 0
+ },
+ {
+  "name": "sq_setcompilererrorhandler",
+  "kind": "code",
+  "rva": "0x607ce0",
+  "pattern": "48 8B 81 18 01 00 00 48 89 90 40 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_push",
+  "kind": "code",
+  "rva": "0x607240",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 85 D2 78 1C",
+  "offset": 0
+ },
+ {
+  "name": "sq_pop",
+  "kind": "code",
+  "rva": "0x616990",
+  "pattern": "48 85 D2 7E 6F 48 89 5C 24 08 57 48 83 EC 20",
+  "offset": 0
+ },
+ {
+  "name": "sq_poptop",
+  "kind": "code",
+  "rva": "0x616930",
+  "pattern": "48 8B 51 60 48 FF CA 48 89 51 60 48 8B 05 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "sq_remove",
+  "kind": "code",
+  "rva": "0x616b40",
+  "pattern": "40 57 48 83 EC 20 48 89 5C 24 30 48 8B DA",
+  "offset": 0
+ },
+ {
+  "name": "sq_gettop",
+  "kind": "code",
+  "rva": "0x606a50",
+  "pattern": "48 8B 41 60 48 2B 41 68 C3 CC CC CC",
+  "offset": 0
+ },
+ {
+  "name": "sq_settop",
+  "kind": "code",
+  "rva": "0x608330",
+  "pattern": "48 89 5C 24 08 57 48 83 EC 20 48 8B 41 60",
+  "offset": 0
+ },
+ {
+  "name": "sq_move",
+  "kind": "code",
+  "rva": "0x606cd0",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 8B CA 4C 8B CA",
+  "offset": 0
+ },
+ {
+  "name": "sq_newuserdata",
+  "kind": "code",
+  "rva": "0x6070c0",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 8B D9 48 8B 89 18 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_newtable",
+  "kind": "code",
+  "rva": "0x606f50",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 74 24 58 48 8B F9 48 8B B1 18 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_newclosure",
+  "kind": "code",
+  "rva": "0x606d20",
+  "pattern": "41 56 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 6C 24 58 48 89 74 24 60 48 89 7C 24 68 4D 8B F0",
+  "offset": 0
+ },
+ {
+  "name": "sq_setparamscheck",
+  "kind": "code",
+  "rva": "0x6080b0",
+  "pattern": "40 56 57 41 56 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 60 48 89 6C 24 68",
+  "offset": 0
+ },
+ {
+  "name": "sq_bindenv",
+  "kind": "code",
+  "rva": "0x605b20",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 74 24 58 48 8B F1",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushstring",
+  "kind": "code",
+  "rva": "0x607410",
+  "pattern": "40 53 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 8B D9 48 85 D2 74 4F",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushfloat",
+  "kind": "code",
+  "rva": "0x6072e0",
+  "pattern": "48 83 EC 48 48 C7 44 24 20 FE FF FF FF C7 44 24 28 04 00 00 05",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushinteger",
+  "kind": "code",
+  "rva": "0x607330",
+  "pattern": "48 83 EC 48 48 C7 44 24 20 FE FF FF FF C7 44 24 28 02 00 00 05 48 89 54 24 30 48 8D 54 24 28 E8 ?? ?? ?? ?? 90 F7 44 24 28 00 00 00 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushbool",
+  "kind": "code",
+  "rva": "0x607280",
+  "pattern": "48 83 EC 48 48 C7 44 24 20 FE FF FF FF C7 44 24 28 08 00 00 01",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushnull",
+  "kind": "code",
+  "rva": "0x607380",
+  "pattern": "48 8D 15 ?? ?? ?? ?? E9 ?? ?? ?? ?? CC CC CC CC 48 83 EC 48",
+  "offset": 0
+ },
+ {
+  "name": "sq_gettype",
+  "kind": "code",
+  "rva": "0x606a60",
+  "pattern": "48 83 EC 28 48 85 D2 78 13 48 FF CA",
+  "offset": 0
+ },
+ {
+  "name": "sq_getsize",
+  "kind": "code",
+  "rva": "0x6068e0",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 44 8B 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_tostring",
+  "kind": "code",
+  "rva": "0x608480",
+  "pattern": "40 53 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? C7 44 24 28 01 00 00 01",
+  "offset": 0
+ },
+ {
+  "name": "sq_tobool",
+  "kind": "code",
+  "rva": "0x608430",
+  "pattern": "48 89 5C 24 08 57 48 83 EC 20 49 8B F8 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 48 8B D0",
+  "offset": 0
+ },
+ {
+  "name": "sq_getstring",
+  "kind": "code",
+  "rva": "0x6069a0",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 49 8B D8 48 8B F1 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 10 00 00 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_getinteger",
+  "kind": "code",
+  "rva": "0x6066f0",
+  "pattern": "40 53 48 83 EC 20 49 8B D8 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 8B 08 0F BA E1 1A 73 28",
+  "offset": 0
+ },
+ {
+  "name": "sq_getfloat",
+  "kind": "code",
+  "rva": "0x6065c0",
+  "pattern": "40 53 48 83 EC 20 49 8B D8 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 8B 08 0F BA E1 1A 73 2E",
+  "offset": 0
+ },
+ {
+  "name": "sq_getbool",
+  "kind": "code",
+  "rva": "0x6063c0",
+  "pattern": "40 53 48 83 EC 20 49 8B D8 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 08 00 00 01",
+  "offset": 0
+ },
+ {
+  "name": "sq_getuserpointer",
+  "kind": "code",
+  "rva": "0x606b50",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 49 8B D8 48 8B F1 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 00 08 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_getuserdata",
+  "kind": "code",
+  "rva": "0x606a90",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 49 8B D9",
+  "offset": 0
+ },
+ {
+  "name": "sq_setreleasehook",
+  "kind": "code",
+  "rva": "0x608220",
+  "pattern": "40 53 48 83 EC 20 48 8B 41 60 49 8B D8",
+  "offset": 0
+ },
+ {
+  "name": "sq_getscratchpad",
+  "kind": "code",
+  "rva": "0x6068d0",
+  "pattern": "48 8B 89 18 01 00 00 E9 ?? ?? ?? ?? CC CC",
+  "offset": 0
+ },
+ {
+  "name": "sq_setnativeclosurename",
+  "kind": "code",
+  "rva": "0x607fe0",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 49 8B F8",
+  "offset": 0
+ },
+ {
+  "name": "sq_setinstanceup",
+  "kind": "code",
+  "rva": "0x607f80",
+  "pattern": "48 89 5C 24 08 57 48 83 EC 20 49 8B F8 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 00 80 00 0A",
+  "offset": 0
+ },
+ {
+  "name": "sq_getinstanceup",
+  "kind": "code",
+  "rva": "0x606630",
+  "pattern": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 49 8B D9 49 8B F0 48 8B F9",
+  "offset": 0
+ },
+ {
+  "name": "sq_createinstance",
+  "kind": "code",
+  "rva": "0x6060a0",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 74 24 58 48 8B F9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 00 40 00 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_setattributes",
+  "kind": "code",
+  "rva": "0x607b10",
+  "pattern": "41 56 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 6C 24 58 48 89 74 24 60 48 89 7C 24 68 48 8B F9",
+  "offset": 0
+ },
+ {
+  "name": "sq_getattributes",
+  "kind": "code",
+  "rva": "0x606270",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 74 24 58 48 8B F9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 48 8B D8",
+  "offset": 0
+ },
+ {
+  "name": "sq_getclass",
+  "kind": "code",
+  "rva": "0x606410",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 74 24 58 48 8B F9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 00 80 00 0A",
+  "offset": 0
+ },
+ {
+  "name": "sq_weakref",
+  "kind": "code",
+  "rva": "0x608730",
+  "pattern": "40 53 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 8B 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushroottable",
+  "kind": "code",
+  "rva": "0x607400",
+  "pattern": "48 8D 51 70 E9 ?? ?? ?? ?? CC CC CC",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushregistrytable",
+  "kind": "code",
+  "rva": "0x6073f0",
+  "pattern": "48 8B 91 18 01 00 00 48 83 C2 58 E9 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "sq_setroottable",
+  "kind": "code",
+  "rva": "0x6082a0",
+  "pattern": "40 53 48 83 EC 30 48 83 CA FF 48 8B D9 E8 ?? ?? ?? ?? 0F 10 08 66 0F 7E CA 0F 11 4C 24 20 81 FA 20 00 00 0A",
+  "offset": 0
+ },
+ {
+  "name": "sq_setconsttable",
+  "kind": "code",
+  "rva": "0x607cf0",
+  "pattern": "40 53 48 83 EC 30 48 83 CA FF 48 8B D9 E8 ?? ?? ?? ?? 0F 10 08 66 0F 7E C8",
+  "offset": 0
+ },
+ {
+  "name": "sq_newslot",
+  "kind": "code",
+  "rva": "0x606e60",
+  "pattern": "48 89 5C 24 18 57 48 83 EC 30 48 8B F9",
+  "offset": 0
+ },
+ {
+  "name": "sq_get",
+  "kind": "code",
+  "rva": "0x6061c0",
+  "pattern": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 30 48 8B F9 48 85 D2",
+  "offset": 0
+ },
+ {
+  "name": "sq_rawget",
+  "kind": "code",
+  "rva": "0x607620",
+  "pattern": "48 89 74 24 10 57 48 83 EC 30 48 8B F9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 48 8B F0",
+  "offset": 0
+ },
+ {
+  "name": "sq_rawset",
+  "kind": "code",
+  "rva": "0x620b80",
+  "pattern": "48 C7 C2 FD FF FF FF E9 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "sq_rawdeleteslot",
+  "kind": "code",
+  "rva": "0x607490",
+  "pattern": "40 57 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 50 48 89 6C 24 58 48 89 74 24 60 49 8B E8",
+  "offset": 0
+ },
+ {
+  "name": "sq_arrayappend",
+  "kind": "code",
+  "rva": "0x605710",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 48 8B F9 48 8B 49 68",
+  "offset": 0
+ },
+ {
+  "name": "sq_arraypop",
+  "kind": "code",
+  "rva": "0x605800",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 89 74 24 48 49 8B F0 48 8B F9",
+  "offset": 0
+ },
+ {
+  "name": "sq_setdelegate",
+  "kind": "code",
+  "rva": "0x607e00",
+  "pattern": "48 89 5C 24 08 57 48 83 EC 20 48 8B D9 48 85 D2",
+  "offset": 0
+ },
+ {
+  "name": "sq_getdelegate",
+  "kind": "code",
+  "rva": "0x606500",
+  "pattern": "40 53 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 48 8B D0",
+  "offset": 0
+ },
+ {
+  "name": "sq_getweakrefval",
+  "kind": "code",
+  "rva": "0x606c20",
+  "pattern": "40 53 48 83 EC 40 48 C7 44 24 20 FE FF FF FF 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 81 38 00 00 01 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_clear",
+  "kind": "code",
+  "rva": "0x605e20",
+  "pattern": "40 53 48 83 EC 20 48 8B D9 48 85 D2 78 0E 48 FF CA 48 03 51 68 E8 ?? ?? ?? ?? EB 05 E8 ?? ?? ?? ?? 8B 08",
+  "offset": 0
+ },
+ {
+  "name": "sq_call",
+  "kind": "code",
+  "rva": "0x605d30",
+  "pattern": "48 8B C4 57 41 56 41 57 48 83 EC 50 48 C7 40 C8 FE FF FF FF 48 89 58 08 48 89 68 10 48 89 70 18 4D 8B F8",
+  "offset": 0
+ },
+ {
+  "name": "sq_getlocal",
+  "kind": "code",
+  "rva": "0x606760",
+  "pattern": "48 89 5C 24 10 48 89 74 24 18 48 89 7C 24 20 41 56 48 83 EC 30 4C 8B 99 C8 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_throwerror",
+  "kind": "code",
+  "rva": "0x6083a0",
+  "pattern": "40 57 48 83 EC 30 48 C7 44 24 20 FE FF FF FF 48 89 5C 24 40 48 8B D9 49 83 C8 FF",
+  "offset": 0
+ },
+ {
+  "name": "sq_getlasterror",
+  "kind": "code",
+  "rva": "0x606750",
+  "pattern": "48 8D 91 80 00 00 00 E9 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "sq_getstackobj",
+  "kind": "code",
+  "rva": "0x606960",
+  "pattern": "40 53 48 83 EC 20 49 8B D8 48 85 D2 78 1A",
+  "offset": 0
+ },
+ {
+  "name": "sq_pushobject",
+  "kind": "calltarget",
+  "rva": "0x607390",
+  "pattern": "0F 85 ?? ?? ?? ?? 48 8D 41 10 0F 10 00",
+  "offset": 27
+ },
+ {
+  "name": "sq_addref",
+  "kind": "code",
+  "rva": "0x6056f0",
+  "pattern": "F7 02 00 00 00 08 74 10 48 8B 89 18 01 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_release",
+  "kind": "code",
+  "rva": "0x607a70",
+  "pattern": "F7 02 00 00 00 08 75 06 B8 01 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_resetobject",
+  "kind": "code",
+  "rva": "0x607b00",
+  "pattern": "48 C7 41 08 00 00 00 00 C7 01 01 00 00 01",
+  "offset": 0
+ },
+ {
+  "name": "sq_collectgarbage",
+  "kind": "code",
+  "rva": "0x605f30",
+  "pattern": "48 8B D1 48 8B 89 18 01 00 00 E9 ?? ?? ?? ??",
+  "offset": 0
+ },
+ {
+  "name": "sq_readclosure",
+  "kind": "code",
+  "rva": "0x607990",
+  "pattern": "48 8B C4 57 48 83 EC 40 48 C7 40 D8 FE FF FF FF 48 89 58 08 48 89 68 18 48 89 70 20 49 8B F0",
+  "offset": 0
+ },
+ {
+  "name": "sq_malloc",
+  "kind": "code",
+  "rva": "0x608e70",
+  "pattern": "48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 83 EC 38",
+  "offset": 0
+ },
+ {
+  "name": "sq_realloc",
+  "kind": "code",
+  "rva": "0x608e80",
+  "pattern": "48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 83 EC 38",
+  "offset": 0
+ },
+ {
+  "name": "sq_free",
+  "kind": "code",
+  "rva": "0x608e60",
+  "pattern": "48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 FF 25 ?? ?? ?? ?? CC CC CC CC CC CC CC CC CC 48 83 EC 38",
+  "offset": 0
+ },
+ {
+  "name": "sq_stackinfos",
+  "kind": "code",
+  "rva": "0x608d60",
+  "pattern": "40 53 48 83 EC 20 48 8B 81 C8 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "sq_setdebughook",
+  "kind": "code",
+  "rva": "0x607d70",
+  "pattern": "40 53 48 83 EC 30 48 83 CA FF 48 8B D9 E8 ?? ?? ?? ?? 0F 10 08 66 0F 7E CA 0F 11 4C 24 20 81 FA 00 01 00 08 74 10 81 FA 00 02 00 08 74 08 81 FA 01 00 00 01 75 4B 48 8B 44 24 28 44 8B 83 A0 00 00 00",
+  "offset": 0
+ },
+ {
+  "name": "AppContext",
+  "kind": "data",
+  "rva": "0xf208a0",
+  "pattern": "48 89 7C 24 40 48 8B CF E8 ?? ?? ?? ??",
+  "offset": 21,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "ResourceManagerContext",
+  "kind": "data",
+  "rva": "0xc09188",
+  "pattern": "48 89 7C 24 40 48 8B 3D ?? ?? ?? ??",
+  "offset": 5,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "GameSaveData",
+  "kind": "data",
+  "rva": "0xf20758",
+  "pattern": "49 89 5E 48 48 8B D3 E8 ?? ?? ?? ??",
+  "offset": 12,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "FrameDelta",
+  "kind": "data",
+  "rva": "0xc3aa58",
+  "pattern": "F2 0F 59 C3 66 49 0F 7E D9 BA 20 00 00 00",
+  "offset": 33,
+  "disp_offset": 4,
+  "insn_len": 8
+ },
+ {
+  "name": "MaxFPS",
+  "kind": "data",
+  "rva": "0xbf5f4c",
+  "pattern": "48 63 0D ?? ?? ?? ?? 48 99 48 F7 F9",
+  "offset": 0,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "WindowDC",
+  "kind": "data",
+  "rva": "0xc365a8",
+  "pattern": "41 8B F8 8B F2 48 89 0D ?? ?? ?? ??",
+  "offset": 5,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "ArchiveCount",
+  "kind": "data",
+  "rva": "0xf20770",
+  "pattern": "48 8B 0D ?? ?? ?? ?? 83 F8 01 75 35",
+  "offset": 0,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "ArchiveList",
+  "kind": "data",
+  "rva": "0xf219c0",
+  "pattern": "48 8D 1D ?? ?? ?? ?? 48 C7 05 ?? ?? ?? ?? 00 00 00 00",
+  "offset": 0,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "ArchiveTable",
+  "kind": "data",
+  "rva": "0xf229c0",
+  "pattern": "48 8D 35 ?? ?? ?? ?? 4C 89 7C 24 20",
+  "offset": 0,
+  "disp_offset": 3,
+  "insn_len": 7
+ },
+ {
+  "name": "ArchiveIsInit",
+  "kind": "data",
+  "rva": "0xf20656",
+  "pattern": "C6 05 ?? ?? ?? ?? 01 48 83 C4 20 5F",
+  "offset": 0,
+  "disp_offset": 2,
+  "insn_len": 7
+ },
+ {
+  "name": "IAT_wglGetProcAddress",
+  "kind": "import",
+  "rva": "0x8bfc48",
+  "dll": "opengl32.dll",
+  "function": "wglGetProcAddress"
+ },
+ {
+  "name": "IAT_SteamAPI_Init",
+  "kind": "import",
+  "rva": "0x8c09d0",
+  "dll": "steam_api64.dll",
+  "function": "SteamAPI_Init"
+ }
+]

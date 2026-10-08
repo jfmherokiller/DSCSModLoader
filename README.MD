@@ -42,14 +42,48 @@ You may want to adjust the `config.toml` to your desires using a regular text ed
 - Added ability to load binary patches during startup
 - Added plugin loader, see [Plugin Template](https://github.com/SydMontague/DSCSPluginTemplate/)
 
+# Signature-based addresses
+The loader does not hard-code game addresses. Every function, global and patch site it uses is
+located at startup by a byte signature (AOB scan of the game's `.text`), see
+`include/dscs/signatures.inc`. If any signature cannot be found (unknown game build), the loader
+logs which ones failed and **leaves the game unmodified** instead of patching the wrong memory.
+
+Plugins can use the same mechanism:
+- `char* findSignature(const char* pattern)` - unique match of a pattern like `48 8B 05 ?? ?? ?? ??`, or `nullptr`
+- `char* getGameSymbol(const char* name)` - an address the loader already resolved, e.g. `"sq_pushstring"`
+- `patchBytes`/`redirectJump`/`redirectCall` accept a pointer as well as an RVA, and `patchRel32`
+  retargets a rel32 operand (call/jmp/RIP-relative) safely.
+
+## Regenerating signatures
+The shipped exe is SteamStub-encrypted on disk, so signatures are generated from a
+[Steamless](https://github.com/atom0s/Steamless)-unpacked copy:
+```
+pip install pefile capstone
+python tools/gen_signatures.py "Digimon Story CS.exe.unpacked.exe"
+```
+This rewrites `include/dscs/signatures.inc` and `tools/signatures.json`. Each pattern is grown
+instruction by instruction, with relocation-dependent bytes (rel32 branch targets, RIP-relative
+displacements) wildcarded, until it matches exactly once. The offline checker verifies the result
+with the same C++ scanner the loader uses:
+```
+cmake -S . -B build -DDSCSML_BUILD_TESTS=ON && cmake --build build --target sigtest
+build/sigtest "Digimon Story CS.exe.unpacked.exe"   # -> 127/127 symbols resolved ...
+```
+
 # Patches
 In order to apply custom patches you have to create a plain .txt file in the `resource/patches` folder.
-A patch is formatted like `offset=<list of hex bytes>`. Lines that start with `;` are comments.
+A patch is formatted like `offset=<list of hex bytes>` or, preferably,
+`sig:<pattern>[+<hex offset>]=<list of hex bytes>`. Lines that start with `;` are comments.
+Signature patches are found by byte pattern instead of a fixed offset, so they keep working if the
+code moves; raw offsets still work but log a warning.
 
 Example:
 ```
 ; patch "Acceleration" hacking skill for Cyber Sleuth
 0x227AD6=63
+
+; the same kind of patch, located by signature (wildcards with ??, offset from the match start)
+sig:48 85 C0 74 07 B9 01 00 00 00 FF D0+6=00
 
 ; DInput background
 0x57EC91=0A

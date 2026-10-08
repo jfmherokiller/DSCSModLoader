@@ -17,11 +17,24 @@ enum class HexToStringResult
 
 extern __declspec(dllexport) char* getBaseOffset();
 
+// Offset-based API (offset = RVA). Kept for plugin compatibility; new code should
+// resolve addresses by signature (modloader/sigscan.h) and use the pointer overloads.
 extern __declspec(dllexport) void patchBytes(const std::vector<uint8_t>& data, const uint64_t offset);
 
 extern __declspec(dllexport) void redirectJump(const void* target, const uint64_t offset);
 
 extern __declspec(dllexport) void redirectCall(const void* target, const uint64_t offset);
+
+// Pointer-based API.
+extern __declspec(dllexport) void patchBytes(const std::vector<uint8_t>& data, void* address);
+
+extern __declspec(dllexport) void redirectJump(const void* target, void* address);
+
+extern __declspec(dllexport) void redirectCall(const void* target, void* address);
+
+// Rewrites the rel32 operand at insn+dispOffset so the instruction (of insnLength bytes)
+// refers to `target`. Returns false if target is out of rel32 range.
+extern __declspec(dllexport) bool patchRel32(void* insn, int32_t dispOffset, int32_t insnLength, const void* target);
 
 extern __declspec(dllexport) const HexToStringResult
     parseByteArray(const std::string& str, std::vector<uint8_t>& vector);
